@@ -1,0 +1,1794 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CashbackRadar - Gratis Testen Aktionen &amp; Verfügbarkeit</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ==========================================================================
+       NAVBAR
+       ========================================================================== -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="logo">
+        <div class="logo-badge">€</div>
+        <span>CashbackRadar</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#" class="nav-link active">Dashboard</a></li>
+        <li><a href="#community" class="nav-link">Community-Meldungen</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ==========================================================================
+       HERO / QUICK STATS
+       ========================================================================== -->
+  <header class="hero-section">
+    <div class="container">
+      <h1 class="gradient-text">Gratis Testen Aktionen im Blick</h1>
+      <p>Verfolge tagesaktuelle Limits, vergleiche Teilnahmebedingungen und finde sofort heraus, in welchen Supermärkten und Drogerien du die Aktionsprodukte kaufen kannst!</p>
+      
+      <!-- Dynamic Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card blue" id="stat-active">
+          <div class="stat-card-content">
+            <div class="stat-label">Aktive Aktionen</div>
+            <div class="stat-value" id="val-active">--</div>
+            <div class="stat-desc">Sofort einlösbar</div>
+          </div>
+          <svg class="stat-icon icon-blue" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z"></path>
+          </svg>
+        </div>
+        
+        <div class="stat-card green" id="stat-potential">
+          <div class="stat-card-content">
+            <div class="stat-label">Sparpotenzial</div>
+            <div class="stat-value" id="val-potential">0.00 <span class="stat-unit">€</span></div>
+            <div class="stat-desc">Bei Teilnahme an allen Aktionen</div>
+          </div>
+          <svg class="stat-icon icon-green" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 5.625c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125"></path>
+          </svg>
+        </div>
+        
+        <div class="stat-card orange" id="stat-daily-reached">
+          <div class="stat-card-content">
+            <div class="stat-label">Tageslimit erreicht</div>
+            <div class="stat-value" id="val-daily-reached">--</div>
+            <div class="stat-desc">Aktionen heute voll</div>
+          </div>
+          <svg class="stat-icon icon-orange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0zM12 2v2"></path>
+          </svg>
+        </div>
+        
+        <div class="stat-card purple" id="stat-total-reached">
+          <div class="stat-card-content">
+            <div class="stat-label">Gesamtlimit erreicht</div>
+            <div class="stat-value" id="val-total-reached">--</div>
+            <div class="stat-desc">Aktionen komplett beendet</div>
+          </div>
+          <svg class="stat-icon icon-purple" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"></path>
+          </svg>
+        </div>
+      </div>
+      
+      <!-- KI-Bot Cashback-Assistent -->
+      <div class="ki-bot-container">
+        <div class="ki-bot-header">
+          <div class="ki-bot-avatar">
+            🤖
+            <span class="avatar-status-dot"></span>
+          </div>
+          <div class="ki-bot-title-group">
+            <span class="ki-bot-name">Radar-Bot</span>
+            <span class="ki-bot-status">Cashback-Assistent • Online</span>
+          </div>
+        </div>
+        <div class="ki-bot-chat-area" id="ki-bot-chat-area">
+          <div class="ki-bot-msg bot">
+            Hallo! Ich bin dein Cashback-Assistent. Frag mich einfach, z. B.: <i>„Gibt es gerade Duschgel kostenlos?“</i> oder <i>„Hast du Katzenfutter gratis?“</i>.
+          </div>
+        </div>
+        <div class="ki-bot-input-group">
+          <input type="text" id="ki-bot-input" placeholder="Frage den Cashback-Assistenten..." onkeydown="handleKiBotKeydown(event)">
+          <button class="btn btn-primary" onclick="sendKiBotMessage()" style="padding: 10px 16px; justify-content: center; font-weight: 700;">Senden</button>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       MAIN FILTER & SEARCH
+       ========================================================================== -->
+  <main class="container">
+    <section class="filter-wrapper">
+      <div class="filter-grid">
+        <!-- Search bar -->
+        <div class="search-box">
+          <svg class="search-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+          <input type="text" id="search-input" placeholder="Produkt oder Marke suchen...">
+        </div>
+        
+        <!-- Filter Category select -->
+        <select class="filter-select" id="filter-category">
+          <option value="all">Alle Kategorien</option>
+          <option value="Lebensmittel">Lebensmittel</option>
+          <option value="Drogerie">Drogerie</option>
+          <option value="Haushalt">Haushalt</option>
+          <option value="Haustiere">Haustiere</option>
+        </select>
+        
+        <!-- Filter Retailer select -->
+        <select class="filter-select" id="filter-retailer">
+          <option value="all">Beliebiger Einkaufsort</option>
+          <option value="REWE">REWE</option>
+          <option value="Edeka">EDEKA</option>
+          <option value="Kaufland">Kaufland</option>
+          <option value="dm-drogerie markt">dm Drogerie</option>
+          <option value="Rossmann">Rossmann</option>
+          <option value="Müller">Müller Drogerie</option>
+          <option value="Aldi">Aldi Süd/Nord</option>
+          <option value="Lidl">Lidl</option>
+          <option value="Fressnapf">Fressnapf</option>
+        </select>
+        
+        <!-- Sort Select -->
+        <select class="filter-select" id="sort-select">
+          <option value="default">Sortieren: Empfohlen</option>
+          <option value="cashback-desc">Höchster Cashback-Wert</option>
+          <option value="deadline-asc">Baldiges Aktionsende</option>
+        </select>
+      </div>
+      
+      <!-- Category chips (quick click) -->
+      <div class="category-chips">
+        <button class="chip active" data-category="all">Alle</button>
+        <button class="chip" data-category="Lebensmittel">Lebensmittel</button>
+        <button class="chip" data-category="Drogerie">Drogerie</button>
+        <button class="chip" data-category="Haushalt">Haushalt</button>
+        <button class="chip" data-category="Haustiere">Haustiere</button>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         CAMPAIGN CARDS GRID
+         ========================================================================== -->
+    <div id="campaign-grid" class="campaign-grid">
+      <!-- Rendered dynamically in app.js -->
+    </div>
+
+    <!-- ==========================================================================
+         COMMUNITY REPORTS / SIMULATOR
+         ========================================================================== -->
+    <section class="community-section" id="community" style="margin-top: 56px;">
+      <div class="simulator-box">
+        <h2>Community-Meldung einreichen</h2>
+        <p>Teile deine Erfahrungen aus dem Laden oder melde erfolgreiche Einreichungen! Hilf anderen Sparen.</p>
+        
+        <form id="report-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="report-user">Dein Name / Alias</label>
+              <input type="text" id="report-user" placeholder="SparFuchs99" required>
+            </div>
+            <div class="form-group">
+              <label for="report-product">Aktionsprodukt</label>
+              <select id="report-product" required>
+                <!-- Filled dynamically -->
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="report-retailer">Einkaufsmarkt</label>
+              <select id="report-retailer" required>
+                <option value="REWE">REWE</option>
+                <option value="Edeka">EDEKA</option>
+                <option value="Kaufland">Kaufland</option>
+                <option value="dm-drogerie markt">dm-drogerie markt</option>
+                <option value="Rossmann">Rossmann</option>
+                <option value="Müller">Müller Drogerie</option>
+                <option value="Aldi">Aldi Süd/Nord</option>
+                <option value="Lidl">Lidl</option>
+                <option value="Netto">Netto Marken-Discount</option>
+                <option value="Fressnapf">Fressnapf</option>
+                <option value="Anderer Händler">Anderer Händler</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="report-status">Status der Aktion</label>
+              <select id="report-status" required>
+                <option value="ok">✅ Erfolgreich erstattet / Limit offen</option>
+                <option value="warning">⚠️ Produkt fast ausverkauft im Regal</option>
+                <option value="danger">❌ Bon abgelehnt / Limit voll</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="report-text">Erfahrung &amp; Details</label>
+            <textarea id="report-text" placeholder="z. B. 'Bei REWE in Köln-Kalk waren heute noch 5 Packungen Oreo Double Creme im Keksregal. Bon-Upload lief problemlos durch!'" required></textarea>
+          </div>
+          
+          <button type="submit" class="btn btn-primary" style="justify-content: center; font-weight: 700;">Meldung veröffentlichen</button>
+        </form>
+        
+        <!-- Live stream -->
+        <div class="reports-container">
+          <h3 style="font-size: 1.1rem; border-left: 3px solid var(--accent-purple); padding-left: 8px; margin-bottom: 12px;">Live-Meldungen</h3>
+          <span style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: -8px; margin-bottom: 12px; font-style: italic;">⚠️ Demo-Feed: Vordefinierte &amp; simulierte Meldungen zur Veranschaulichung</span>
+          <div class="reports-feed" id="reports-feed">
+            <!-- Rendered in app.js -->
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==========================================================================
+       CAMPAIGN DETAIL MODAL
+       ========================================================================== -->
+  <div class="modal-overlay" id="detail-modal">
+    <div class="modal-content">
+      <button class="modal-close" id="modal-close" aria-label="Schließen">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+      
+      <div class="modal-body" id="modal-body-content">
+        <!-- Rendered dynamically in app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading scripts -->
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script>
+  // Inlined from data.js to allow running locally without CORS errors
+  // Bedingungen aus den Teilnahmebedingungen.
+
+const CAMPAIGNS = [
+  {
+    "id": "axe-duschgel",
+    "name": "Axe Fine Fragrance Body Wash gratis testen",
+    "brand": "Axe",
+    "validBarcodes": [
+      "8712561234567",
+      "8712561234568"
+    ],
+    "cashbackVal": 2.99,
+    "category": "Drogerie",
+    "limitNote": "Täglich 2.500 Teilnahmen möglich (Reset um 08:00 Uhr).",
+    "limitType": "daily",
+    "deadline": "2026-06-14",
+    "websiteUrl": "https://aktionen.oca-services.com/teilnahmeformular/axe/de-de/fine-fragrance-bodywash-gratis-testen#/",
+    "imageUrl": "images/axe-emerald-patchouli.jpg",
+    "allowedRetailers": [
+      "dm-drogerie markt",
+      "Rossmann",
+      "Müller",
+      "Budni",
+      "Kaufland"
+    ],
+    "excludedRetailers": [
+      "REWE",
+      "Edeka",
+      "Aldi Süd",
+      "Aldi Nord",
+      "Lidl",
+      "Netto",
+      "Penny",
+      "Online-Shops"
+    ],
+    "allowedRetailersText": "Ausschließlich gültig bei dm, Rossmann, Müller, Budni und Kaufland. Normale Supermärkte (REWE, Edeka) und Discounter (Aldi, Lidl, Netto) sind komplett ausgeschlossen!",
+    "conditions": [
+      "Aktionszeitraum: 25.05.2026 – 14.06.2026 (Kaufzeitraum). Upload-Frist bis 16.06.2026.",
+      "Gilt für alle Axe Fine Fragrance Body Wash Produkte.",
+      "Maximal 1 Erstattung pro Haushalt, E-Mail-Adresse und Bankverbindung.",
+      "Tägliches Kontingent von 2.500 Uploads, Reset täglich um 08:00 Uhr.",
+      "Kassenbon muss von dm, Rossmann, Müller, Budni oder Kaufland stammen."
+    ],
+    "participatingProducts": [
+      {
+        "name": "Axe Duschgel Blue Lavender 225ml",
+        "imageUrl": "images/axe-blue-lavender.jpg"
+      },
+      {
+        "name": "Axe Duschgel Aqua Bergamot 225ml",
+        "imageUrl": "images/axe-aqua-bergamot.jpg"
+      },
+      {
+        "name": "Axe Duschgel Black Vanilla 225ml",
+        "imageUrl": "images/axe-black-vanilla.png"
+      },
+      {
+        "name": "Axe Duschgel Cherry Fizz 225ml",
+        "imageUrl": "images/axe-cherry-fizz.png"
+      },
+      {
+        "name": "Axe Duschgel Emerald Patchouli 225ml",
+        "imageUrl": "images/axe-emerald-patchouli.jpg"
+      }
+    ],
+    "infoText": "Axe Fine Fragrance Body Wash völlig gratis ausprobieren! WICHTIG: Achte auf den Händler – Käufe bei REWE oder Edeka werden abgelehnt. Nur Drogerien und Kaufland sind zulässig.",
+    "isPopular": true,
+    "tips": [
+      "Ausschluss-Achtung: Supermärkte (REWE, Edeka) und Discounter (Aldi, Lidl) sind komplett ausgeschlossen. Kauf nur bei dm, Rossmann, Müller, Budni oder Kaufland zulässig!",
+      "Lade nur ein Foto des Kassenbons hoch – das Produkt darf nicht mit auf dem Foto sein.",
+      "Das Tageslimit von 2.500 Plätzen füllt sich ab 08:00 Uhr morgens sehr schnell. Am besten vormittags einreichen."
+    ],
+    "rating": 4.8
+  },
+  {
+    "id": "nivea-derma-control",
+    "name": "Nivea Deo Derma Control (Clinical)",
+    "brand": "Nivea",
+    "validBarcodes": [
+      "4005808801045"
+    ],
+    "cashbackVal": 3.99,
+    "category": "Drogerie",
+    "limitNote": "Täglich 4.000 Teilnahmen möglich (Reset ca. 09:00 Uhr). In der Regel gut verfügbar.",
+    "limitType": "daily",
+    "deadline": "2026-06-21",
+    "websiteUrl": "https://www.nivea.de/gratisdeo",
+    "imageUrl": "images/nd-dry-deo.png",
+    "allowedRetailers": [],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Gültig im stationären und Online-Handel bei allen deutschen Einzelhändlern. Keine Händlerausschlüsse!",
+    "conditions": [
+      "Kaufzeitraum bis zum 21.06.2026.",
+      "Gilt für Nivea Derma Control Clinical Deospray (150ml) oder Roll-On (50ml).",
+      "Erstattung bis max. 4,29 € (tatsächlicher Kaufpreis).",
+      "Tägliches Kontingent von 4.000 Erstattungen (Reset ca. 09:00 Uhr).",
+      "Maximal 1 Erstattung pro Haushalt und Bankverbindung."
+    ],
+    "participatingProducts": [
+      {
+        "name": "Nivea Derma Dry Control Clinical Deospray 150ml",
+        "imageUrl": "images/nd-dry-deo.png"
+      },
+      {
+        "name": "Nivea Derma Dry Control Clinical Roll-On 50ml",
+        "imageUrl": "images/nd-dry-ro.png"
+      },
+      {
+        "name": "Nivea Derma Control Clinical (Men) Deospray 150ml",
+        "imageUrl": "images/nd-men-deo.png"
+      },
+      {
+        "name": "Nivea Derma Control Clinical (Men) Roll-On 50ml",
+        "imageUrl": "images/nd-men-ro.png"
+      }
+    ],
+    "infoText": "Derma Control Deo mit maximalem Schutz kostenlos testen. Keine Händlerausschlüsse – auch Käufe im Online-Handel und bei Discountern (Aldi, Lidl, Netto) sind voll erstattungsfähig.",
+    "isPopular": true,
+    "tips": [
+      "Sehr entspannte Aktion: Das Tageslimit von 4.000 Uploads ist hoch und fast nie tagsüber erschöpft.",
+      "Online-Käufe sind ausdrücklich erlaubt. Achte darauf, dass die Rechnung alle Pflichtangaben enthält.",
+      "Kein spezieller Aktionssticker erforderlich. Gilt nur für die Clinical-Varianten."
+    ],
+    "rating": 4.7
+  },
+  {
+    "id": "die-limo-granini",
+    "name": "Die Limo von Granini (1,0l PET oder Dose)",
+    "brand": "Granini",
+    "cashbackVal": 1.79,
+    "category": "Lebensmittel",
+    "limitNote": "Wöchentliches Kontingent von 7.078 Plätzen (Reset jeweils zum Start der neuen Woche). Kein tägliches Limit!",
+    "limitType": "weekly",
+    "deadline": "2026-06-25",
+    "websiteUrl": "https://www.granini.de/wm/",
+    "imageUrl": "images/limo-orange-lemongras-1l.jpg",
+    "allowedRetailers": [],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Gültig bei allen Supermärkten, Drogerien, Discountern und Online-Händlern in ganz Deutschland. Keine Händlerausschlüsse!",
+    "conditions": [
+      "Gilt für Granini Die Limo (alle Sorten) in der 1,0l PET-Flasche oder 0,33l/0,5l Dose.",
+      "Aktion gilt für Einkäufe im gesamten deutschen Handel.",
+      "Wöchentliches Limit von 7.078 Uploads, Reset zum Start einer jeden neuen Woche.",
+      "1 Teilnahme pro Person und Haushalt."
+    ],
+    "participatingProducts": [
+      {
+        "name": "Die Limo Orange-Lemongras 1,0l PET",
+        "imageUrl": "images/limo-orange-lemongras-1l.jpg"
+      },
+      {
+        "name": "Die Limo Limette-Zitrone 1,0l PET",
+        "imageUrl": "images/limo-limette-zitrone-1l.jpg"
+      },
+      {
+        "name": "Die Limo Pink Grapefruit-Cranberry 1,0l PET",
+        "imageUrl": "images/limo-grapefruit-cranberry-1l.jpg"
+      },
+      {
+        "name": "Die Limo Zitrone-Minze 1,0l PET",
+        "imageUrl": "images/limo-zitrone-minze-1l.jpg"
+      },
+      {
+        "name": "Die Limo Orange-Lemongras 0,5l Dose",
+        "imageUrl": "images/limo-orange-lemongras-05l.jpg"
+      }
+    ],
+    "infoText": "Erfrischende Limonade von Granini kostenlos probieren! Die Erstattung läuft wöchentlich über das granini-Portal.",
+    "isPopular": true,
+    "tips": [
+      "Keine klassische 100% Geld-zurück-Aktion, sondern ein Gewinnspiel mit garantiertem Mindestgewinn von 1,00 € (bis zu 1.111 €).",
+      "Ggf. ein kleiner 'Money Maker', falls die Limo im Angebot für unter 1,00 € gekauft wird.",
+      "Nur 1 Teilnahme pro Person, E-Mail und Bankverbindung für den gesamten Aktionszeitraum."
+    ],
+    "rating": 4.9
+  },
+  {
+    "id": "deli-reform-omega3",
+    "name": "Deli Reform Omega-3 Daily (225g)",
+    "brand": "Deli Reform",
+    "cashbackVal": 1.49,
+    "category": "Lebensmittel",
+    "limitNote": "Täglich 100 Plätze ab 08:00 Uhr verfügbar. Gesamtlimit von 9.000 Einreichungen.",
+    "limitType": "daily",
+    "deadline": "2026-08-31",
+    "websiteUrl": "https://www.deli-gratis-testen.de/",
+    "imageUrl": "images/deli-reform-omega3.jpg",
+    "allowedRetailers": [],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Keine Händlerausschlüsse genannt. Der Kauf kann in jedem Supermarkt oder Discounter stattfinden, der das Produkt führt.",
+    "conditions": [
+      "Aktionsprodukt: Deli Reform Omega-3 Daily (225g).",
+      "Einreichung des Kassenbons vom 27.05.2026 bis 31.08.2026.",
+      "Limitiert auf 9.000 Einlösungen insgesamt.",
+      "Tägliches Kontingent von 100 Erstattungen (Reset um 08:00 Uhr).",
+      "Aktion kann vorzeitig enden, wenn das Gesamtkontingent erschöpft ist.",
+      "Maximal eine Erstattung pro Haushalt."
+    ],
+    "participatingProducts": [
+      {
+        "name": "Deli Reform Omega-3 Daily (225g Becher)",
+        "imageUrl": "images/deli-reform-omega3.jpg"
+      }
+    ],
+    "infoText": "Pflanzliche Margarine mit Omega-3 gratis sichern. Sei schnell: Das Limit von 100 Uploads pro Tag ist oft schon nachmittags aufgebraucht. Lade deinen Bon direkt morgens nach dem Reset (08:00 Uhr) hoch.",
+    "isPopular": false,
+    "tips": [
+      "Extreme Limitierung: Nur 100 Uploads pro Tag ab 08:00 Uhr morgens. Die Plätze sind meistens innerhalb von 3 bis 5 Minuten (bis 08:05 Uhr) vollständig vergriffen!",
+      "Es werden nur gedruckte Kassenbons auf Papier akzeptiert. E-Bons (z. B. aus der REWE-App) werden abgelehnt.",
+      "Es muss ein Foto des Kassenbons zusammen mit dem physischen Produkt hochgeladen werden."
+    ],
+    "rating": 3.5
+  },
+  {
+    "id": "airwick-calgon-cillit",
+    "name": "Air Wick, Calgon & Cillit Bang (3 € ab 10 € Einkauf)",
+    "brand": "Air Wick",
+    "cashbackVal": 3,
+    "category": "Haushalt",
+    "limitNote": "Gesamtlimit von 35.000 Teilnahmen. Kein fixes Tageslimit, aber Counter prüfen!",
+    "limitType": "total",
+    "deadline": "2026-12-31",
+    "websiteUrl": "https://vestacy-cashback-coupon.de/",
+    "imageUrl": "images/airwick-calgon-cillit.jpg",
+    "allowedRetailers": [],
+    "excludedRetailers": [
+      "Amazon",
+      "Online-Shops"
+    ],
+    "allowedRetailersText": "In jedem stationären Handel (Supermärkte, Drogerien, Discounter). Online-Einkäufe (insb. Amazon) sind ausdrücklich ausgeschlossen.",
+    "conditions": [
+      "Kaufe Produkte von Air Wick, Calgon und/or Cillit Bang im Gesamtwert von mindestens 10 €.",
+      "Kaufzeitraum: 01.05.2026 – 31.12.2026.",
+      "Erstattung beträgt pauschal 3 €.",
+      "Aktionsprodukte können gemischt werden.",
+      "Maximal 1 Teilnahme pro Person und Haushalt.",
+      "Maximal 35.000 Teilnahmen insgesamt."
+    ],
+    "participatingProducts": [
+      {
+        "name": "Air Wick Active Fresh Starterset",
+        "imageUrl": "images/airwick-calgon-cillit.jpg"
+      },
+      {
+        "name": "Air Wick Duftstecker Nachfüller Botanica",
+        "imageUrl": "images/airwick-calgon-cillit.jpg"
+      },
+      {
+        "name": "Calgon Hygiene+ Wasserenthärter Pulver 1.2kg",
+        "imageUrl": "images/calgon-entkalker-pulver.png"
+      },
+      {
+        "name": "Cillit Bang Kraftreiniger Kalk & Schmutz (750ml)",
+        "imageUrl": "images/cillit-bang.jpg"
+      }
+    ],
+    "infoText": "Gute Kombi-Aktion für den Haushalt! Achte darauf, genau die 10 € Schwelle zu erreichen, um effektiv 30 % Rabatt auf deine Lieblingsreiniger oder Raumdüfte zu erhalten.",
+    "isPopular": false,
+    "tips": [
+      "Die 10 € Einkaufswert müssen nach Abzug aller Händlerrabatte und sonstigen Coupons erreicht werden (Rossmann 10%-Coupon beachten!).",
+      "Online-Käufe (insbesondere Amazon) sind komplett ausgeschlossen.",
+      "Unterliegt einem täglichen Limit an Teilnahmen, daher Bons am besten morgens ab 09:00 Uhr hochladen."
+    ],
+    "rating": 4
+  },
+  {
+    "id": "lenor-waschmittel",
+    "name": "Lenor Waschmittel & Wäscheparfüm gratis testen",
+    "brand": "Lenor",
+    "cashbackVal": 4.99,
+    "category": "Haushalt",
+    "limitNote": "Kein tägliches Limit. Aktion läuft bis zum Ende des Kaufzeitraums.",
+    "limitType": "total",
+    "deadline": "2026-06-30",
+    "websiteUrl": "https://www.for-me-online.de/lenor-waschmittel",
+    "websiteUrls": [
+      {
+        "label": "Aktionsseite Waschmittel",
+        "url": "https://www.for-me-online.de/lenor-waschmittel"
+      },
+      {
+        "label": "Aktionsseite Wäscheparfüm",
+        "url": "https://www.for-me-online.de/lenor-wascheparfum"
+      }
+    ],
+    "imageUrl": "images/lenor_pods_amethyst.png",
+    "allowedRetailers": [],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Alle stationären Supermärkte und Drogerien zugelassen. Kein expliziter Händlerausschlüsse in den Bedingungen.",
+    "conditions": [
+      "Aktionsprodukte: Lenor Waschmittel (flüssig oder Pulver), All-in-1 PODS, oder Wäscheparfüm.",
+      "Aktionszeitraum: bis 30.06.2026.",
+      "Kein tägliches Teilnahmelimit.",
+      "Maximal 1 Teilnahme pro Person/Haushalt."
+    ],
+    "participatingProducts": [
+      {
+        "name": "Lenor Wäscheparfüm Aprilfrisch (155g)",
+        "imageUrl": "images/lenor_parfum_aprilfrisch.webp"
+      },
+      {
+        "name": "Lenor Unstoppables Fresh (155g)",
+        "imageUrl": "images/lenor_unstoppables_fresh.webp"
+      },
+      {
+        "name": "Lenor All-in-1 PODS Amethyst (15WL)",
+        "imageUrl": "images/lenor_pods_amethyst.png"
+      },
+      {
+        "name": "Lenor All-in-1 PODS Aprilfrisch (15WL)",
+        "imageUrl": "images/lenor_pods_aprilfrisch.webp"
+      },
+      {
+        "name": "Lenor All-in-1 PODS Orangenblüte (15WL)",
+        "imageUrl": "images/lenor_pods_orange.webp"
+      },
+      {
+        "name": "Lenor Waschmittel Pulver Amethyst (18WL)",
+        "imageUrl": "images/lenor_pulver_amethyst.webp"
+      }
+    ],
+    "infoText": "Kostenlos Lenor sichern! Kauf dir deine Lieblingssorte. Achte auf den Aktionssticker, auch wenn dieser offiziell oft nicht zwingend für den Cashback-Upload verlangt wird.",
+    "isPopular": true,
+    "tips": [
+      "Die Aktion läuft über das P&G-Portal (ForMe). Die Auszahlung dauert erfahrungsgemäß recht lange (oft 6 Wochen oder mehr).",
+      "Es laufen zwei separate Aktionen (Waschmittel/Pods und Wäscheparfüm). Du kannst an beiden je einmal teilnehmen!"
+    ],
+    "rating": 4.8
+  },
+  {
+    "id": "whiskas-geld-zurueck",
+    "name": "Whiskas Geld-zurück-Aktion (bis 5 € Cashback)",
+    "brand": "Whiskas",
+    "cashbackVal": 5,
+    "category": "Haustiere",
+    "limitNote": "Wöchentliches Limit von 1.000 Teilnahmen. Stündliche Freischaltung von 07:00 bis 22:00 Uhr.",
+    "limitType": "weekly",
+    "deadline": "2026-07-01",
+    "websiteUrl": "https://www.whiskas.de/aktion",
+    "imageUrl": "images/whiskas-nassfutter.jpg",
+    "allowedRetailers": [],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Gültig im stationären Handel und Online-Handel bei allen deutschen Einzelhändlern, Drogerien, Discountern und Tierfachgeschäften (z. B. Fressnapf). Keine Händlerausschlüsse!",
+    "conditions": [
+      "Kaufe Whiskas Produkte im Wert von mindestens 5 €.",
+      "Erhalte 5 € auf dein Bankkonto erstattet.",
+      "Aktionszeitraum: 01.04.2026 bis 01.07.2026.",
+      "Wöchentliches Limit von 1.000 Cashback-Teilnahmen (stündlich freigeschaltet von 07:00 bis 22:00 Uhr).",
+      "Maximal 1 Teilnahme pro Person/IBAN."
+    ],
+    "participatingProducts": [
+      {
+        "name": "Whiskas 1+ Trockenfutter mit Huhn (1,9kg)",
+        "imageUrl": "images/whiskas-dry-huhn.jpg"
+      },
+      {
+        "name": "Whiskas 1+ Trockenfutter mit Rind (1,9kg)",
+        "imageUrl": "images/whiskas-dry-rind.jpg"
+      },
+      {
+        "name": "Whiskas Nassfutter Portionsbeutel 12x85g (Geflügel)",
+        "imageUrl": "images/whiskas-nassfutter.jpg"
+      },
+      {
+        "name": "Whiskas Knuspertaschen Snacks (60g)",
+        "imageUrl": "images/whiskas-knuspertaschen.jpg"
+      }
+    ],
+    "infoText": "Super Aktion für Katzenbesitzer: Du kannst für ca. 5-6 € Whiskas kaufen und erhältst 5 € Cashback. Praktisch geschenktes Futter!",
+    "isPopular": true,
+    "tips": [
+      "Das wöchentliche Limit von 1.000 Einlösungen wird stündlich (von 07:00 bis 22:00 Uhr) freigeschaltet. Lade deinen Bon direkt zu Beginn einer vollen Stunde (z. B. um 08:00 oder 09:00 Uhr) hoch.",
+      "Alle Händler (inklusive Fressnapf, Rossmann und Online-Shops) sind erlaubt."
+    ],
+    "rating": 4.5
+  },
+  {
+    "id": "somat-excellence",
+    "name": "Somat Gel gratis testen",
+    "brand": "Somat",
+    "validBarcodes": [
+      "4015200038162"
+    ],
+    "cashbackVal": 9.99,
+    "category": "Haushalt",
+    "limitNote": "Täglich 1.208 Teilnahmen möglich (Reset täglich um 09:00 Uhr).",
+    "limitType": "daily",
+    "deadline": "2026-06-30",
+    "websiteUrl": "https://gratis.testen.somat.de/",
+    "imageUrl": "images/somat-excellence-60.jpg",
+    "allowedRetailers": [],
+    "excludedRetailers": [
+      "Amazon",
+      "Online-Shops"
+    ],
+    "allowedRetailersText": "Ausschließlich gültig für Einkäufe im stationären Einzelhandel in Deutschland. Online-Käufe und Online-Lieferdienste sind komplett ausgeschlossen!",
+    "conditions": [
+      "Kaufzeitraum: 01.04.2026 – 30.06.2026. Bon-Upload bis 15.07.2026.",
+      "Gültig für Aktionsprodukte mit dem 'Gratis testen'-Sticker.",
+      "Maximal 1 Erstattung pro Haushalt (max. 9,99 €).",
+      "Tägliches Limit von 1.208 Einlösungen (Reset um 09:00 Uhr morgens)."
+    ],
+    "participatingProducts": [
+      {
+        "name": "Somat Power Gel All in 1 (67 WL)",
+        "imageUrl": "images/somat-power-gel-67.jpg"
+      },
+      {
+        "name": "Somat Excellence Premium 5in1 Gel Power & Perls (60 WL)",
+        "imageUrl": "images/somat-excellence-60.jpg"
+      }
+    ],
+    "infoText": "Teures Geschirrspül-Gel völlig gratis testen. Kaufe ein Aktionsprodukt mit dem 'Gratis testen'-Sticker vor Ort im Geschäft. Lade dann den Kassenbon und ein Foto des Produkts mit sichtbarem Sticker hoch. Das tägliche Kontingent von 1.208 Einlösungen setzt sich morgens um 09:00 Uhr zurück.",
+    "isPopular": true,
+    "tips": [
+      "Strikter Sticker-Zwang! Du musst zwingend ein Aktionsprodukt mit dem gelben 'Gratis testen'-Aufkleber kaufen.",
+      "Beim Einreichen muss ein Foto des Kassenbons UND ein Foto des Produkts mit dem sichtbaren Aufkleber hochgeladen werden.",
+      "Kauf im Online-Handel oder bei Online-Lieferdiensten ist ausgeschlossen."
+    ],
+    "rating": 4.7
+  },
+  {
+    "id": "nescafe-frappe",
+    "name": "NESCAFÉ frappé Eiskaffee gratis testen",
+    "brand": "NESCAFÉ",
+    "cashbackVal": 3.49,
+    "category": "Lebensmittel",
+    "limitNote": "Insgesamt 60.000 Teilnahmen.",
+    "limitType": "total",
+    "deadline": "2026-06-30",
+    "websiteUrl": "https://www.nescafe.com/de/unsere-aktionen/frappe-gratis-testen",
+    "imageUrl": "images/nescafe-frappe.png",
+    "allowedRetailers": [],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Überall gültig. Du kannst den Kaffee im Supermarkt deiner Wahl kaufen.",
+    "conditions": [
+      "Gilt für NESCAFÉ frappé Typ Eiskaffee (275g-Dose).",
+      "Aktionszeitraum bis 30.06.2026.",
+      "Insgesamt maximal 60.000 Teilnahmen.",
+      "Erstattung des tatsächlichen Kaufpreises."
+    ],
+    "participatingProducts": [
+      {
+        "name": "NESCAFÉ frappé Typ Eiskaffee (275g Dose)",
+        "imageUrl": "images/nescafe-frappe.png"
+      }
+    ],
+    "infoText": "Perfekt für den Sommer: Der Eiskaffee von NESCAFÉ. Das Gesamtlimit von 60.000 Teilnahmen sinkt kontinuierlich – sichere dir deine Erstattung, solange der Vorrat reicht.",
+    "isPopular": true,
+    "tips": [
+      "Sehr unkomplizierte Aktion mit hohem Gesamtlimit (60.000 Uploads).",
+      "Online-Käufe (z. B. bei Amazon) sind erlaubt, eventuelle Versandkosten werden jedoch nicht erstattet."
+    ],
+    "rating": 4.3
+  },
+  {
+    "id": "rockstar-mocktail",
+    "name": "Rockstar Mocktail Energy-Drink gratis testen",
+    "brand": "Rockstar",
+    "cashbackVal": 1.19,
+    "category": "Lebensmittel",
+    "limitNote": "Wöchentliches Limit von 2.500 Teilnahmen. Insgesamt max. 100.000. Maximal 3 Dosen je IBAN!",
+    "limitType": "weekly",
+    "deadline": "2027-02-28",
+    "websiteUrl": "https://www.rockstarenergy.de/mocktails-aktion",
+    "imageUrl": "images/rockstar-mocktail.jpg",
+    "allowedRetailers": [],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Überall gültig (im stationären Handel). Kein Kassenbon nötig – Code befindet sich unter der goldenen Lasche!",
+    "conditions": [
+      "Kaufe ein Rockstar Mocktail Aktionsprodukt mit goldener Lasche.",
+      "Aktionszeitraum: 01.06.2026 bis 28.02.2027.",
+      "Maximal 3 Teilnahmen (Erstattungen à 1,19 € exkl. Pfand) pro IBAN.",
+      "Wöchentliches Limit von 2.500 Teilnahmen."
+    ],
+    "participatingProducts": [
+      {
+        "name": "Rockstar Mocktail Pina Colada (0,33l Dose)",
+        "imageUrl": "images/rockstar-pina-colada.png"
+      },
+      {
+        "name": "Rockstar Mocktail Berry Spritz (0,33l Dose)",
+        "imageUrl": "images/rockstar-berry-spritz.jpg"
+      },
+      {
+        "name": "Rockstar Mocktail Mojito (0,33l Dose)",
+        "imageUrl": "images/rockstar-mojito.jpg"
+      }
+    ],
+    "infoText": "Erfrischender Rockstar Energy Mocktail gratis testen! Kein Kassenbon erforderlich – trage einfach den Aktionscode unter der goldenen Lasche auf der Aktionsseite ein.",
+    "isPopular": true,
+    "tips": [
+      "Kein Kassenbon erforderlich! Der Aktionscode befindet sich direkt unter der goldenen Lasche der Dose.",
+      "Achte beim Kauf im Laden darauf, dass die Dose eine goldene Lasche besitzt (alte Chargen haben silberne Laschen ohne Code).",
+      "Bis zu 3 Erstattungen pro IBAN/Person möglich. Hebe die Laschen zur Sicherheit auf, bis das Geld überwiesen ist."
+    ],
+    "rating": 4.4
+  },
+  {
+    "id": "tetesept-melatonin",
+    "name": "tetesept Melatonin Einschlaf Spray gratis testen",
+    "brand": "tetesept",
+    "cashbackVal": 7.99,
+    "category": "Drogerie",
+    "limitNote": "Insgesamt 16.863 Teilnahmen. Kein wöchentliches/tägliches Limit.",
+    "limitType": "total",
+    "deadline": "2026-06-30",
+    "websiteUrl": "https://tetesept-aktion.de/",
+    "imageUrl": "images/tetesept-melatonin-spray.png",
+    "allowedRetailers": [
+      "dm-drogerie markt",
+      "Rossmann",
+      "Müller",
+      "Edeka",
+      "REWE",
+      "Globus",
+      "Citti"
+    ],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Gültig beim Kauf im stationären Handel bei dm, Rossmann, Müller, Edeka, REWE, Globus und Citti. Online-Händler sind ausgeschlossen.",
+    "conditions": [
+      "Kaufzeitraum: 03.06.2026 bis 30.06.2026. Einsendeschluss: 07.07.2026.",
+      "Gilt für das tetesept Melatonin Einschlaf-Spray 2,0 mg.",
+      "Insgesamt 16.863 Einlösungen möglich.",
+      "Maximal 1 Erstattung (bis zu 7,99 €) pro Person und IBAN."
+    ],
+    "participatingProducts": [
+      {
+        "name": "tetesept Melatonin Einschlaf-Spray 2,0 mg (30ml)",
+        "imageUrl": "images/tetesept-melatonin-spray.png"
+      }
+    ],
+    "infoText": "Kostenlos tetesept Melatonin Einschlaf-Spray sichern! Wichtig: Nur Käufe vor Ort im stationären Handel (z.B. dm, Rossmann, Müller, REWE, EDEKA) sind zulässig. Online-Bestellungen sind ausgeschlossen.",
+    "isPopular": true,
+    "tips": [
+      "Gilt ausschließlich für das Melatonin Einschlaf-Spray 2,0 mg (30ml). Sprays mit geringerer Dosierung nehmen nicht teil.",
+      "Online-Bestellungen sind ausgeschlossen (nur stationärer Kauf)."
+    ],
+    "rating": 4.6
+  },
+  {
+    "id": "cottonelle-feucht",
+    "name": "Cottonelle Feuchtes Toilettenpapier Ultimativ Frisch gratis testen",
+    "brand": "Cottonelle",
+    "cashbackVal": 1.79,
+    "category": "Drogerie",
+    "limitNote": "Täglich 604 Teilnahmen (Reset um 08:00 Uhr). Insgesamt max. 36.871.",
+    "limitType": "daily",
+    "deadline": "2026-07-31",
+    "websiteUrl": "https://cottonelle-aktion.de/",
+    "imageUrl": "images/cottonelle-ultimativ-frisch-packung.jpg",
+    "allowedRetailers": [],
+    "excludedRetailers": [
+      "Online-Shops"
+    ],
+    "allowedRetailersText": "Gültig im stationären Handel in ganz Deutschland. Online-Käufe sind ausgeschlossen.",
+    "conditions": [
+      "Kaufzeitraum: 01.06.2026 bis 31.07.2026. Kassenbon-Upload bis 15.08.2026.",
+      "Gilt für Cottonelle Feuchtes Toilettenpapier Ultimativ Frisch (42 Tücher).",
+      "Tägliches Limit: 604 Teilnahmen (Reset um 08:00 Uhr).",
+      "Maximal 1 Erstattung (bis zu 1,79 €) pro Haushalt (Person/IBAN)."
+    ],
+    "participatingProducts": [
+      {
+        "name": "Cottonelle Feuchtes Toilettenpapier Ultimativ Frisch (42 Tücher)",
+        "imageUrl": "images/cottonelle-ultimativ-frisch-packung.jpg"
+      }
+    ],
+    "infoText": "Gratis testen: Feuchtes Toilettenpapier von Cottonelle. Achtung: Es gibt ein tägliches Limit von 604 Uploads ab 08:00 Uhr morgens – lade den Kassenbon am besten direkt morgens hoch.",
+    "isPopular": true,
+    "tips": [
+      "Das tägliche Limit von 604 Uploads (Reset um 08:00 Uhr) ist extrem schnell voll. Meistens sind die Plätze vor 08:30 Uhr morgens weg.",
+      "Gilt nur für die Sorte 'Ultimativ Frisch' (42 Tücher) mit der EAN 5029053584737. Andere Sorten werden abgelehnt.",
+      "Online-Käufe sind ausgeschlossen."
+    ],
+    "rating": 4.5
+  },
+  {
+    "id": "tony-s-chocolonely-tony-s-chocolonely-9",
+    "name": "Tony's Chocolonely 90g oder 180g Tafel",
+    "brand": "Tony's Chocolonely",
+    "cashbackVal": 4.99,
+    "category": "Lebensmittel",
+    "limitNote": "1.300 Teilnehmer pro Woche - \n30.000 Teilnehmer insgesamt (Montags ab 09:00 Uhr)",
+    "limitType": "weekly",
+    "deadline": "2026-06-14",
+    "websiteUrl": "https://tonys-testen.de",
+    "imageUrl": "images/tonys-chocolonely.jpg",
+    "allowedRetailers": [],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Gültig im Einzelhandel in Deutschland.",
+    "conditions": [
+      "Kaufzeitraum bis zum 14.06.2026.",
+      "Teilnahmefrist / Einsendeschluss: 14.06.2026.",
+      "Teilnahmebedingungen: 1.300 Teilnehmer pro Woche - \n30.000 Teilnehmer insgesamt.",
+      "Nachweis: Foto/Scan."
+    ],
+    "participatingProducts": [
+      {
+        "name": "Tony's Chocolonely 90g oder 180g Tafel",
+        "imageUrl": "images/tonys-chocolonely.jpg"
+      }
+    ],
+    "infoText": "Teste Tony's Chocolonely 90g oder 180g Tafel völlig kostenlos! Erstattung über das offizielle Portal.",
+    "isPopular": false,
+    "tips": [
+      "Seit dem 16.03.2026 nehmen alle Tony's-Tafeln (90g und 180g) an der Aktion teil – ein spezieller Aktionssticker ist für Käufe ab diesem Datum nicht mehr erforderlich.",
+      "Das wöchentliche Limit von 1.300 Plätzen wird montags um 09:00 Uhr zurückgesetzt. Lade den Kassenbon am besten direkt montags vormittags hoch.",
+      "Die Erstattung deckt den tatsächlichen Kaufpreis bis maximal 4,99 € ab, somit sind auch teurere Sorten oder Angebote abgedeckt."
+    ],
+    "rating": 4
+  },
+  {
+    "id": "desperados-desperados-tropical",
+    "name": "Desperados Tropical Daiquiri Bier-Mixgetränk",
+    "brand": "Desperados",
+    "cashbackVal": 2.99,
+    "category": "Lebensmittel",
+    "limitNote": "15.000 Teilnehmer insgesamt",
+    "limitType": "total",
+    "deadline": "2026-06-28",
+    "websiteUrl": "https://www.desperados.com/de/de/gratistesten/",
+    "imageUrl": "images/desperados-tropical.jpg",
+    "allowedRetailers": [],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Gültig im Einzelhandel in Deutschland.",
+    "conditions": [
+      "Kaufzeitraum bis zum 28.06.2026.",
+      "Teilnahmefrist / Einsendeschluss: 05.07.2026.",
+      "Teilnahmebedingungen: 15.000 Teilnehmer insgesamt.",
+      "Nachweis: Foto/Scan."
+    ],
+    "participatingProducts": [
+      {
+        "name": "Desperados Tropical Daiquiri 0,5 l Dose",
+        "imageUrl": "images/desperados-tropical-05l-can.png"
+      },
+      {
+        "name": "Desperados Tropical Daiquiri 0,33 l Flasche",
+        "imageUrl": "images/desperados-tropical-033l-bottle.png"
+      }
+    ],
+    "infoText": "Teste Desperados Tropical Daiquiri völlig kostenlos! Erstattung über das offizielle Portal.",
+    "isPopular": false,
+    "tips": [
+      "Gilt sowohl für die 0,5l Einzeldose als auch für das 0,33l Flaschengebinde.",
+      "Wichtig bei Mehrfachgebinden (z. B. 4er-Pack): Es wird nicht das ganze Gebinde erstattet, sondern eine Pauschale (2,05 € für die 0,5l Dose bzw. 1,79 € für die 0,33l Flasche).",
+      "Wie üblich bei Alkohol-Cashback-Aktionen ist das Flaschenpfand von der Erstattung ausgenommen."
+    ],
+    "rating": 4
+  },
+  {
+    "id": "purina-purina-gourmet-revel",
+    "name": "Purina Gourmet Revelations Katzennahrungsprodukte",
+    "brand": "Purina",
+    "cashbackVal": 6.58,
+    "category": "Haustiere",
+    "limitNote": "Es wird ein Gesamtbetrag von 65.800€ ausgeschüttet.",
+    "limitType": "total",
+    "deadline": "2026-06-28",
+    "websiteUrl": "https://www.purina.de/aktion/gourmet",
+    "imageUrl": "images/purina-gourmet-revelations.jpg",
+    "allowedRetailers": [],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Gültig im Einzelhandel in Deutschland.",
+    "conditions": [
+      "Kaufzeitraum bis zum 28.06.2026.",
+      "Teilnahmefrist / Einsendeschluss: 12.07.2026.",
+      "Teilnahmebedingungen: Es wird ein Gesamtbetrag von 65.800€ ausgeschüttet..",
+      "Nachweis: Foto/Scan."
+    ],
+    "participatingProducts": [
+      {
+        "name": "GOURMET REVELATIONS Mousse mit Rind (2x57g)",
+        "imageUrl": "images/gourmet-revelations-mousse-rind-2er.jpg"
+      },
+      {
+        "name": "GOURMET REVELATIONS Mousse mit Huhn (2x57g)",
+        "imageUrl": "images/gourmet-revelations-mousse-huhn-2er.jpg"
+      },
+      {
+        "name": "GOURMET REVELATIONS Mousse mit Huhn (4x57g)",
+        "imageUrl": "images/gourmet-revelations-mousse-huhn-4er.jpg"
+      },
+      {
+        "name": "GOURMET REVELATIONS Mousse mit Thunfisch (2x57g)",
+        "imageUrl": "images/gourmet-revelations-mousse-thunfisch-2er.jpg"
+      },
+      {
+        "name": "GOURMET REVELATIONS Mousse mit Hochseefisch (4x57g)",
+        "imageUrl": "images/gourmet-revelations-mousse-hochseefisch-4er.jpg"
+      },
+      {
+        "name": "GOURMET REVELATIONS Mousse mit Lachs (4x57g)",
+        "imageUrl": "images/gourmet-revelations-mousse-lachs-4er.jpg"
+      },
+      {
+        "name": "GOURMET REVELATIONS Feine Häppchen in Gelée mit Huhn (2x57g)",
+        "imageUrl": "images/gourmet-revelations-gelee-huhn-2er.jpg"
+      },
+      {
+        "name": "GOURMET REVELATIONS Feine Häppchen in Gelée mit Huhn (4x57g)",
+        "imageUrl": "images/gourmet-revelations-gelee-huhn-4er.jpg"
+      },
+      {
+        "name": "GOURMET REVELATIONS Feine Häppchen in Gelée mit Lachs (2x57g)",
+        "imageUrl": "images/gourmet-revelations-gelee-lachs-2er.jpg"
+      },
+      {
+        "name": "GOURMET REVELATIONS Feine Häppchen in Gelée mit Lachs (4x57g)",
+        "imageUrl": "images/gourmet-revelations-gelee-lachs-4er.jpg"
+      }
+    ],
+    "infoText": "Teste Purina Gourmet Revelations Katzennahrungsprodukte völlig kostenlos! Erstattung über das offizielle Portal.",
+    "isPopular": false,
+    "tips": [
+      "Wichtig: Du musst mindestens 2 teilnehmende Gourmet-Produkte (z. B. Revelations 2er oder 4er Pack) kaufen. Die Erstattung beträgt maximal 6,58 €.",
+      "Für die Teilnahme ist eine Anmeldung zum Purina & Gourmet Newsletter erforderlich. Vergiss nicht, den Aktivierungslink in der Bestätigungs-E-Mail anzuklicken!",
+      "Der Name des Teilnehmers muss exakt mit dem Inhaber des Bankkontos übereinstimmen, ansonsten wird die Erstattung abgelehnt."
+    ],
+    "rating": 4
+  },
+  {
+    "id": "cheez-it-cheez-it-double-chee",
+    "name": "Cheez-it Double Cheese oder Cheese & Chili 120g",
+    "brand": "Cheez-it",
+    "cashbackVal": 2.99,
+    "category": "Lebensmittel",
+    "limitNote": "7.500 Teilnehmer pro Woche",
+    "limitType": "weekly",
+    "deadline": "2026-06-30",
+    "websiteUrl": "https://cheezit-aktion.de/",
+    "imageUrl": "images/cheez-it-double-cheese.jpg",
+    "allowedRetailers": [],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Gültig im Einzelhandel in Deutschland.",
+    "conditions": [
+      "Kaufzeitraum bis zum 30.06.2026.",
+      "Teilnahmefrist / Einsendeschluss: 30.06.2026.",
+      "Teilnahmebedingungen: 7.500 Teilnehmer pro Woche.",
+      "Nachweis: Foto/Scan."
+    ],
+    "participatingProducts": [
+      {
+        "name": "CHEEZ-IT Double Cheese (120g)",
+        "imageUrl": "images/cheez-it-double-cheese.jpg"
+      },
+      {
+        "name": "CHEEZ-IT Cheese & Chili (120g)",
+        "imageUrl": "images/cheez-it-cheese-chili.jpg"
+      }
+    ],
+    "infoText": "Teste Cheez-it Double Cheese oder Cheese & Chili 120g völlig kostenlos! Erstattung über das offizielle Portal.",
+    "isPopular": false,
+    "tips": [
+      "Kein Aktionssticker erforderlich: Es nehmen alle regulären 120g-Packungen der Sorten 'Double Cheese' oder 'Cheese & Chili' teil.",
+      "Das wöchentliche Limit liegt bei 7.500 Teilnahmen. Sollte es erschöpft sein, kannst du deinen Bon einfach in der Folgewoche hochladen.",
+      "Auszahlung erfolgt innerhalb von ca. 4 Wochen. Hebe den Original-Kassenbon bis zum Geldeingang gut auf."
+    ],
+    "rating": 4
+  },
+  {
+    "id": "hengstenberg-hengstenberg-salate",
+    "name": "HENGSTENBERG Salate to Go",
+    "brand": "HENGSTENBERG",
+    "cashbackVal": 2.99,
+    "category": "Lebensmittel",
+    "limitNote": "unbekanntes (monatliches) Budget",
+    "limitType": "total",
+    "deadline": "2026-06-30",
+    "websiteUrl": "https://www.salate-to-go.de",
+    "imageUrl": "images/hengstenberg-salat.png",
+    "allowedRetailers": [],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Gültig im Einzelhandel in Deutschland.",
+    "conditions": [
+      "Kaufzeitraum bis zum 30.06.2026.",
+      "Teilnahmefrist / Einsendeschluss: 30.06.2026.",
+      "Teilnahmebedingungen: unbekanntes (monatliches) Budget.",
+      "Nachweis: Foto/Scan."
+    ],
+    "participatingProducts": [
+      {
+        "name": "Bulgur Salat mit Tomate & Karotte (250g Beutel)",
+        "imageUrl": "images/hengstenberg-bulgur-tomate.png"
+      },
+      {
+        "name": "Bulgur Salat mit Rote Bete, Senfsaat & Dill (250g Beutel)",
+        "imageUrl": "images/hengstenberg-bulgur-rotebeete.png"
+      },
+      {
+        "name": "CousCous Salat mit Pflaume, Paprika & Ingwer (250g Beutel)",
+        "imageUrl": "images/hengstenberg-couscous-pflaume.png"
+      }
+    ],
+    "infoText": "Teste HENGSTENBERG Salate to Go völlig kostenlos! Erstattung über das offizielle Portal.",
+    "isPopular": false,
+    "tips": [
+      "Gilt für CousCousSalat Pflaume-Paprika-Ingwer, Bulgur Tomate & Karotte, sowie Bulgur Rote Beete-Senfsaat-Dill.",
+      "Aktion unterliegt monatlichen Budgets, d h. wenn das Kontingent voll ist, pausiert die Aktion bis zum Monatsanfang. Am besten zu Beginn des Monats hochladen.",
+      "Die Auszahlung kann laut Bedingungen bis zu 60 Tage dauern."
+    ],
+    "rating": 4
+  },
+  {
+    "id": "anheuserbusch-anheuser-busch-bud",
+    "name": "Anheuser-Busch Bud",
+    "brand": "AnheuserBusch",
+    "cashbackVal": 2.5,
+    "category": "Lebensmittel",
+    "limitNote": "Kein festes Limit angegeben.",
+    "limitType": "total",
+    "deadline": "2026-07-19",
+    "websiteUrl": "https://scan.anheuser-busch-bud.de/qr/c29d91/landing",
+    "imageUrl": "images/bud-einzelflasche.png",
+    "allowedRetailers": [],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Gültig im Einzelhandel in Deutschland.",
+    "conditions": [
+      "Kaufzeitraum bis zum 19.07.2026.",
+      "Teilnahmefrist / Einsendeschluss: 19.07.2026.",
+      "Teilnahmebedingungen: -.",
+      "Nachweis: Foto/Scan."
+    ],
+    "participatingProducts": [
+      {
+        "name": "Anheuser-Busch Bud Einzeldose (0,33l oder 0,50l)",
+        "imageUrl": "images/bud-einzeldose.png"
+      },
+      {
+        "name": "Anheuser-Busch Bud Einzelflasche (0,3l)",
+        "imageUrl": "images/bud-einzelflasche.png"
+      }
+    ],
+    "infoText": "Teste Anheuser-Busch Bud völlig kostenlos! Erstattung über das offizielle Portal.",
+    "isPopular": false,
+    "tips": [
+      "SMS-Verifizierung erforderlich: Du benötigst für die Teilnahme eine deutsche Mobilfunknummer.",
+      "Erstattung von Einzelkäufen: Es werden nur noch Einzeldosen (bis max. 2.50 €) oder Einzelflaschen (bis max. 2.00 €) erstattet. Sixpacks sind seit dem 08.06.2026 von der Aktion ausgeschlossen!",
+      "Sehr entspannte Aktion ohne Gesamtlimit, somit ist ein Upload jederzeit innerhalb des Aktionszeitraums möglich (Pfand wird nicht erstattet)."
+    ],
+    "rating": 4
+  },
+  {
+    "id": "soda-libre-soda-libre-the-class",
+    "name": "Soda Libre The Classics Lemonade",
+    "brand": "Soda Libre",
+    "cashbackVal": 2.4,
+    "category": "Lebensmittel",
+    "limitNote": "Kein festes Limit angegeben.",
+    "limitType": "total",
+    "deadline": "2026-07-31",
+    "websiteUrl": "https://www.sodalibre-gratistesten.de",
+    "imageUrl": "images/soda-libre-zitrone.jpg",
+    "allowedRetailers": [],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Gültig im Einzelhandel in Deutschland.",
+    "conditions": [
+      "Kaufzeitraum bis zum 31.07.2026.",
+      "Teilnahmefrist / Einsendeschluss: 07.08.2026.",
+      "Teilnahmebedingungen: -.",
+      "Nachweis: Foto/Scan."
+    ],
+    "participatingProducts": [
+      {
+        "name": "Soda Libre The Classics Lemonade Zitrone (330ml)",
+        "imageUrl": "images/soda-libre-zitrone.jpg"
+      },
+      {
+        "name": "Soda Libre The Classics Lemonade Orange (330ml)",
+        "imageUrl": "images/soda-libre-orange.jpg"
+      }
+    ],
+    "infoText": "Teste Soda Libre The Classics Lemonade völlig kostenlos! Erstattung über das offizielle Portal.",
+    "isPopular": false,
+    "tips": [
+      "Kaufe genau 2 Dosen (Zitrone oder Orange) in einem einzigen Einkauf. Die Erstattung beträgt maximal 2,40 € (Pfand wird nicht erstattet).",
+      "Verwende für die Teilnahme ein reguläres Girokonto mit DE-IBAN. Ausländische IBANs (z. B. Malta-Abwicklung der Agentur) können bei manchen Banken zu Problemen führen.",
+      "Die Bearbeitungszeit bis zur Auszahlung liegt erfahrungsgemäß bei ca. 6 Wochen."
+    ],
+    "rating": 4
+  },
+  {
+    "id": "wasa-wasa-selection-kn-ck",
+    "name": "Wasa Selection Knäcke",
+    "brand": "Wasa",
+    "validBarcodes": [
+      "7300400481588",
+      "7300400118408"
+    ],
+    "cashbackVal": 2.49,
+    "category": "Lebensmittel",
+    "limitNote": "40.000 Teilnehmer insgesamt",
+    "limitType": "total",
+    "deadline": "2026-07-31",
+    "websiteUrl": "https://www.wasa.com/de-de/aktionen/active/gratistesten-selection/",
+    "imageUrl": "images/wasa-selection.jpg",
+    "allowedRetailers": [],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Gültig im Einzelhandel in Deutschland.",
+    "conditions": [
+      "Kaufzeitraum bis zum 31.07.2026.",
+      "Teilnahmefrist / Einsendeschluss: 31.07.2026.",
+      "Teilnahmebedingungen: 40.000 Teilnehmer insgesamt.",
+      "Nachweis: Foto/Scan."
+    ],
+    "participatingProducts": [
+      {
+        "name": "Wasa Selection Protein+ (200g)",
+        "imageUrl": "images/wasa-selection-protein.jpg"
+      },
+      {
+        "name": "Wasa Selection Mohn & Meersalz (245g)",
+        "imageUrl": "images/wasa-selection-mohn-meersalz.jpg"
+      },
+      {
+        "name": "Wasa Selection Chia & Meersalz (245g)",
+        "imageUrl": "images/wasa-selection-chia-meersalz.jpg"
+      }
+    ],
+    "infoText": "Teste Wasa Selection Knäcke völlig kostenlos! Erstattung über das offizielle Portal.",
+    "isPopular": false,
+    "tips": [
+      "WICHTIG: Du benötigst für die Teilnahme ein Wasa- bzw. Barilla-Benutzerkonto. Wenn du bereits bei einer früheren Barilla- oder Wasa-Aktion registriert warst, kannst du diese Zugangsdaten nutzen.",
+      "Gilt nur für Einkäufe im stationären Einzelhandel. Käufe bei Amazon oder anderen Online-Shops werden in den Bedingungen ausgeschlossen.",
+      "Aktion läuft mit einem Gesamtlimit von 40.000 Teilnahmen – vor dem Kauf empfiehlt sich ein kurzer Blick auf den Zähler der Aktionswebseite."
+    ],
+    "rating": 4
+  },
+  {
+    "id": "wasa-wasa-crunchy-bites",
+    "name": "WASA Crunchy Bites",
+    "brand": "Wasa",
+    "cashbackVal": 2.19,
+    "category": "Lebensmittel",
+    "limitNote": "40.000 Teilnehmer insgesamt",
+    "limitType": "total",
+    "deadline": "2026-07-31",
+    "websiteUrl": "https://www.wasa.com/de-de/aktionen/active/gratistesten-crunchybites/",
+    "imageUrl": "images/wasa-crunchy-bites.jpg",
+    "allowedRetailers": [],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Gültig im Einzelhandel in Deutschland.",
+    "conditions": [
+      "Kaufzeitraum bis zum 31.07.2026.",
+      "Teilnahmefrist / Einsendeschluss: 31.07.2026.",
+      "Teilnahmebedingungen: 40.000 Teilnehmer insgesamt.",
+      "Nachweis: Foto/Scan."
+    ],
+    "participatingProducts": [
+      {
+        "name": "Wasa Crunchy Bites Sour Cream & Onion (100g)",
+        "imageUrl": "images/wasa-crunchy-bites-sour-cream.png"
+      },
+      {
+        "name": "Wasa Crunchy Bites Cheddar (100g)",
+        "imageUrl": "images/wasa-crunchy-bites-cheddar.png"
+      }
+    ],
+    "infoText": "Teste WASA Crunchy Bites völlig kostenlos! Erstattung über das offizielle Portal.",
+    "isPopular": false,
+    "tips": [
+      "Benutzerkonto benötigt: Die Teilnahme setzt ein Barilla-/Wasa-Konto voraus. Bestehende Konten können direkt verwendet werden.",
+      "Nur für stationäre Händler gültig. Online-Bestellungen (z. B. Amazon) sind ausgeschlossen.",
+      "Teilnehmende Sorten sind 'Sour Cream & Onion' sowie 'Cheddar' (100g Beutel) – andere Packungsgrößen oder Varianten nehmen nicht teil."
+    ],
+    "rating": 4
+  },
+  {
+    "id": "andros-andros-be-nuts",
+    "name": "ANDROS Be Nuts!",
+    "brand": "ANDROS",
+    "cashbackVal": 2.99,
+    "category": "Lebensmittel",
+    "limitNote": "5.000 Teilnahmen pro Monat, 20.000 Teilnahmen insgesamt (jeweils ab 08:30 Uhr)",
+    "limitType": "total",
+    "deadline": "2026-07-31",
+    "websiteUrl": "https://andros-be-nuts.de/pages/gratistesten",
+    "imageUrl": "images/andros-be-nuts-creamy.jpg",
+    "allowedRetailers": [],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Gültig im Einzelhandel in Deutschland.",
+    "conditions": [
+      "Kaufzeitraum bis zum 31.07.2026.",
+      "Teilnahmefrist / Einsendeschluss: 31.07.2026.",
+      "Teilnahmebedingungen: 5.000 Teilnahmen pro Monat, 20.000 Teilnahmen insgesamt.",
+      "Nachweis: Foto/Scan."
+    ],
+    "participatingProducts": [
+      {
+        "name": "ANDROS Be Nuts! Erdnusscreme Creamy (325g)",
+        "imageUrl": "images/andros-be-nuts-creamy.jpg"
+      },
+      {
+        "name": "ANDROS Be Nuts! Erdnusscreme Crunchy (325g)",
+        "imageUrl": "images/andros-be-nuts-crunchy.jpg"
+      },
+      {
+        "name": "ANDROS Be Nuts! Erdnusscreme Kakao (335g)",
+        "imageUrl": "images/andros-be-nuts-kakao.jpg"
+      },
+      {
+        "name": "ANDROS Be Nuts! Erdnussmus 100% (320g)",
+        "imageUrl": "images/andros-be-nuts-100mus.jpg"
+      }
+    ],
+    "infoText": "Teste ANDROS Be Nuts! völlig kostenlos! Erstattung über das offizielle Portal.",
+    "isPopular": false,
+    "tips": [
+      "Das monatliche Limit von 5.000 Einreichungen wird immer am 1. des Monats ab 08:30 Uhr zurückgesetzt. Sollte das Limit voll sein, hebe den Bon einfach für den nächsten Monat auf.",
+      "WICHTIG: Hebe den Original-Kassenbon unbedingt bis zu 3 Monate nach Aktionsende auf, da der Hersteller stichprobenartig den physischen Bon zur Nachprüfung anfordert.",
+      "Es nehmen vier Varianten (Erdnusscreme Creamy, Crunchy, Kakao und das 100% Erdnussmus) an der Aktion teil."
+    ],
+    "rating": 4
+  },
+  {
+    "id": "bad-liebenwerda-bad-liebenwerda-mine",
+    "name": "Bad Liebenwerda Mineralwasser+ Limette-Minze",
+    "brand": "Bad Liebenwerda",
+    "cashbackVal": 2.99,
+    "category": "Lebensmittel",
+    "limitNote": "Kein festes Limit angegeben.",
+    "limitType": "total",
+    "deadline": "2026-07-31",
+    "websiteUrl": "https://www.bad-liebenwerda-cashback.de",
+    "imageUrl": "images/bad-liebenwerda.jpg",
+    "allowedRetailers": [],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Gültig im Einzelhandel in Deutschland.",
+    "conditions": [
+      "Kaufzeitraum bis zum 31.07.2026.",
+      "Teilnahmefrist / Einsendeschluss: 31.07.2026.",
+      "Teilnahmebedingungen: -.",
+      "Nachweis: Foto/Scan."
+    ],
+    "participatingProducts": [
+      {
+        "name": "Bad Liebenwerda Mineralwasser+ Limette-Minze",
+        "imageUrl": "images/bad-liebenwerda.jpg"
+      }
+    ],
+    "infoText": "Teste Bad Liebenwerda Mineralwasser+ Limette-Minze völlig kostenlos! Erstattung über das offizielle Portal.",
+    "isPopular": false,
+    "tips": [
+      "Gilt ausschließlich für die Sorte Mineralwasser+ Limette-Minze in der 0,75l Glasflasche.",
+      "Nur für Einkäufe im stationären Handel zugelassen (Kauf vor Ort).",
+      "Pfand wird nicht erstattet. Du zahlst somit effektiv nur den Flaschenpfand (0,15 €)."
+    ],
+    "rating": 4
+  },
+  {
+    "id": "cillit-bang-cillit-bang-expert-k",
+    "name": "Cillit Bang Expert Kraftreiniger",
+    "brand": "Cillit Bang",
+    "cashbackVal": 2.99,
+    "category": "Haushalt",
+    "limitNote": "250 Teilnahmen täglich - 12.000 Teilnahmen insgesamt (täglich ab 09:00 Uhr)",
+    "limitType": "daily",
+    "deadline": "2026-07-31",
+    "websiteUrl": "https://www.cillitbang-gratis-testen.de",
+    "imageUrl": "images/cillit-bang-expert.jpg",
+    "allowedRetailers": [],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Gültig im Einzelhandel in Deutschland.",
+    "conditions": [
+      "Kaufzeitraum bis zum 31.07.2026.",
+      "Teilnahmefrist / Einsendeschluss: 31.07.2026.",
+      "Teilnahmebedingungen: 250 Teilnahmen täglich - 12.000 Teilnahmen insgesamt.",
+      "Nachweis: Foto.",
+      "SMS-Verifizierung erforderlich."
+    ],
+    "participatingProducts": [
+      {
+        "name": "Cillit Bang Expert Kraftreiniger",
+        "imageUrl": "images/cillit-bang-expert.jpg"
+      }
+    ],
+    "infoText": "Teste Cillit Bang Expert Kraftreiniger völlig kostenlos! Erstattung über das offizielle Portal.",
+    "isPopular": false,
+    "tips": [
+      "Tageslimit beachten: Täglich werden ab 09:00 Uhr 250 Teilnahmen freigeschaltet. Lade deinen Bon am besten direkt morgens hoch.",
+      "Foto-Pflichten: Du musst ein Foto des Kassenbons UND ein Foto des Produkts hochladen, bei dem der EAN-Code gut lesbar ist.",
+      "SMS-Verifizierung: Die Teilnahme erfordert einen Bestätigungscode per SMS an eine deutsche Mobilfunknummer."
+    ],
+    "rating": 4
+  },
+  {
+    "id": "calgon-calgon-4in1-wasseren",
+    "name": "Calgon 4in1 Wasserenthärter Gel 750ml",
+    "brand": "Calgon",
+    "cashbackVal": 4.49,
+    "category": "Haushalt",
+    "limitNote": "Mai: 400 Teilnehmer täglich, Juni: 250 Teilnehmer täglich, Juli: 150 Teilnehmer täglich - 25.000 Teilnehmer insgesamt (täglich ab 09:00 Uhr)",
+    "limitType": "daily",
+    "deadline": "2026-07-31",
+    "websiteUrl": "https://calgon-gratis-testen.de",
+    "imageUrl": "images/calgon-4in1-gel.jpg",
+    "allowedRetailers": [],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Gültig im Einzelhandel in Deutschland.",
+    "conditions": [
+      "Kaufzeitraum bis zum 31.07.2026.",
+      "Teilnahmefrist / Einsendeschluss: 31.07.2026.",
+      "Teilnahmebedingungen: Mai: 400 Teilnehmer täglich, Juni: 250 Teilnehmer täglich, Juli: 150 Teilnehmer täglich - 25.000 Teilnehmer insgesamt.",
+      "Nachweis: Foto.",
+      "SMS-Verifizierung erforderlich."
+    ],
+    "participatingProducts": [
+      {
+        "name": "Calgon 4in1 Wasserenthärter Gel 750ml",
+        "imageUrl": "images/calgon-4in1-gel.jpg"
+      }
+    ],
+    "infoText": "Teste Calgon 4in1 Wasserenthärter Gel 750ml völlig kostenlos! Erstattung über das offizielle Portal.",
+    "isPopular": false,
+    "tips": [
+      "Sehr enges Tageslimit: Im Juni nur 250, im Juli sogar nur 150 Teilnahmen pro Tag (Reset um 09:00 Uhr). Die Plätze sind oft in wenigen Minuten vergriffen!",
+      "Foto des Kassenbons UND des Produkts mit sichtbarem EAN-Code ist zwingend erforderlich.",
+      "SMS-Verifizierung ist Teil des Upload-Prozesses. Die Erstattung beträgt maximal die UVP von 4,49 €."
+    ],
+    "rating": 4
+  },
+  {
+    "id": "teinacher-teinacher-mineralwas",
+    "name": "Teinacher Mineralwasser+ Kiste 0,75l",
+    "brand": "Teinacher",
+    "cashbackVal": 10,
+    "category": "Lebensmittel",
+    "limitNote": "unbekanntes (monatliches) Budget",
+    "limitType": "total",
+    "deadline": "2026-07-31",
+    "websiteUrl": "https://www.teinacher-cashback.de",
+    "imageUrl": "images/teinacher-orange.png",
+    "allowedRetailers": [],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Gültig im Einzelhandel in Deutschland.",
+    "conditions": [
+      "Kaufzeitraum bis zum 31.07.2026.",
+      "Teilnahmefrist / Einsendeschluss: 31.07.2026.",
+      "Teilnahmebedingungen: unbekanntes (monatliches) Budget.",
+      "Nachweis: Foto/Scan."
+    ],
+    "participatingProducts": [
+      {
+        "name": "Teinacher Wasser+ Orange (0,75 Liter Kiste)",
+        "imageUrl": "images/teinacher-orange.png"
+      },
+      {
+        "name": "Teinacher Wasser+ Zitrone (0,75 Liter Kiste)",
+        "imageUrl": "images/teinacher-zitrone.png"
+      },
+      {
+        "name": "Teinacher Wasser+ Limette (0,75 Liter Kiste)",
+        "imageUrl": "images/teinacher-limette.png"
+      }
+    ],
+    "infoText": "Teste Teinacher Mineralwasser+ Kiste 0,75l völlig kostenlos! Erstattung über das offizielle Portal.",
+    "isPopular": false,
+    "tips": [
+      "Mischkiste möglich: Du kannst die verschiedenen Sorten (Orange, Zitrone, Limette) der 0,75l Flaschen in der Kiste frei mischen.",
+      "Maximal 10,00 € Erstattung: Achte auf Angebote, um den Kastenpreis unter 10 € zu halten. Das Kisten- und Flaschenpfand ist wie üblich selbst zu zahlen.",
+      "Budgetbasiert: Die Aktion hat ein begrenztes Gesamtbudget und kann vorzeitig enden. Lade den Kassenbon daher zeitnah nach dem Kauf hoch."
+    ],
+    "rating": 4
+  },
+  {
+    "id": "always-always-discreet-inko",
+    "name": "always Discreet Inkontinenz Maxi Einlagen oder Pants",
+    "brand": "always",
+    "cashbackVal": 9.99,
+    "category": "Drogerie",
+    "limitNote": "Kein festes Limit angegeben.",
+    "limitType": "total",
+    "deadline": "2026-07-31",
+    "websiteUrl": "https://www.for-me-online.de/always-discreet",
+    "imageUrl": "images/always-discreet-maxi-8.jpg",
+    "allowedRetailers": [],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Gültig im Einzelhandel in Deutschland.",
+    "conditions": [
+      "Kaufzeitraum bis zum 31.07.2026.",
+      "Teilnahmefrist / Einsendeschluss: 15.09.2026.",
+      "Teilnahmebedingungen: -.",
+      "Nachweis: Foto.",
+      "SMS-Verifizierung erforderlich."
+    ],
+    "participatingProducts": [
+      {
+        "name": "always Discreet Inkontinenz Maxi 8er",
+        "imageUrl": "images/always-discreet-maxi-8.jpg"
+      },
+      {
+        "name": "always Discreet Inkontinenz Maxi Nacht 8er",
+        "imageUrl": "images/always-discreet-maxi-nacht-8.jpg"
+      },
+      {
+        "name": "always Discreet Inkontinenz Maxi Comfort 8er",
+        "imageUrl": "images/always-discreet-maxi-comfort-8.jpg"
+      },
+      {
+        "name": "always Discreet Inkontinenz Pants Max Protection S/M 8er",
+        "imageUrl": "images/always-discreet-pants-max-sm-8.jpg"
+      },
+      {
+        "name": "always Discreet Inkontinenz Pants Max Protection L 8er",
+        "imageUrl": "images/always-discreet-pants-max-l-8.jpg"
+      },
+      {
+        "name": "always Discreet Inkontinenz Maxi Big Pack 20er",
+        "imageUrl": "images/always-discreet-maxi-20.jpg"
+      },
+      {
+        "name": "always Discreet Inkontinenz Maxi Nacht Big Pack 20er",
+        "imageUrl": "images/always-discreet-maxi-nacht-20.jpg"
+      }
+    ],
+    "infoText": "Teste always Discreet Inkontinenz Maxi Einlagen oder Pants völlig kostenlos! Erstattung über das offizielle Portal.",
+    "isPopular": false,
+    "tips": [
+      "Fotografiere den Kassenbon zusammen mit dem gekauften Produkt, wobei der EAN-Strichcode auf der Packungsrückseite zwingend gut lesbar abgebildet sein muss.",
+      "Läuft über das P&G-Portal (ForMe) und erfordert eine SMS-Verifizierung. Die Auszahlung kann erfahrungsgemäß 6 bis 8 Wochen dauern.",
+      "Nimm an den verschiedenen Varianten (Maxi, Maxi Nacht, Maxi Comfort Einlagen und Max Protection Pants) teil, solange sie das Aktionskennzeichen auf der Webseite aufweisen."
+    ],
+    "rating": 4
+  },
+  {
+    "id": "ben-s-original-ben-s-original-stree",
+    "name": "Ben's Original Street Food Fertiggerichte",
+    "brand": "Ben's Original",
+    "cashbackVal": 2.99,
+    "category": "Lebensmittel",
+    "limitNote": "500 Teilnehmer pro Tag - \n38.500 Teilnehmer insgesamt (täglich ab 09:00 Uhr)",
+    "limitType": "daily",
+    "deadline": "2026-08-02",
+    "websiteUrl": "https://bens-streetfood-gratis-testen.de",
+    "imageUrl": "images/bens-streetfood-indonesian.png",
+    "allowedRetailers": [],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Gültig im Einzelhandel in Deutschland.",
+    "conditions": [
+      "Kaufzeitraum bis zum 02.08.2026.",
+      "Teilnahmefrist / Einsendeschluss: 02.08.2026.",
+      "Teilnahmebedingungen: 500 Teilnehmer pro Tag - \n38.500 Teilnehmer insgesamt.",
+      "Nachweis: Foto."
+    ],
+    "participatingProducts": [
+      {
+        "name": "BEN'S ORIGINAL™ Street Food Indonesian Style Spicy",
+        "imageUrl": "images/bens-streetfood-indonesian.png"
+      },
+      {
+        "name": "BEN'S ORIGINAL™ Street Food Thai Style",
+        "imageUrl": "images/bens-streetfood-thai.png"
+      },
+      {
+        "name": "BEN'S ORIGINAL™ Street Food Chinese Style",
+        "imageUrl": "images/bens-streetfood-chinese.png"
+      },
+      {
+        "name": "BEN'S ORIGINAL™ Street Food Japanese Teriyaki Style",
+        "imageUrl": "images/bens-streetfood-japanese.png"
+      },
+      {
+        "name": "BEN'S ORIGINAL™ Street Food Singapore Curry Style",
+        "imageUrl": "images/bens-streetfood-singapore.png"
+      }
+    ],
+    "infoText": "Teste Ben's Original Street Food Fertiggerichte völlig kostenlos! Erstattung über das offizielle Portal.",
+    "isPopular": false,
+    "tips": [
+      "Das tägliche Limit von 500 Einreichungen wird um 09:00 Uhr freigeschaltet. Lade deinen Bon direkt um 09:00 Uhr hoch, da das Kontingent oft innerhalb von 15-30 Minuten vergriffen ist.",
+      "Es wird ein Foto des Kassenbons gemeinsam mit der Produktpackung benötigt.",
+      "Alle Sorten der Street Food Reihe (wie Thai Style oder Indonesian Style Spicy) sind teilnahmeberechtigt."
+    ],
+    "rating": 4
+  },
+  {
+    "id": "felix-felix-doppelt-lecker",
+    "name": "FELIX Doppelt Lecker Katzennahrungsprodukte",
+    "brand": "FELIX",
+    "cashbackVal": 7,
+    "startDate": "2026-06-22",
+    "category": "Haustiere",
+    "limitNote": "Gesamtbudget: 65.000€",
+    "limitType": "total",
+    "deadline": "2026-08-02",
+    "websiteUrl": "https://www.purina.de/felix/testen",
+    "imageUrl": "images/felix-doppelt-lecker.jpg",
+    "allowedRetailers": [],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Gültig im Einzelhandel in Deutschland.",
+    "conditions": [
+      "Kaufzeitraum bis zum 02.08.2026.",
+      "Teilnahmefrist / Einsendeschluss: 09.08.2026.",
+      "Teilnahmebedingungen: Gesamtbudget: 65.000€.",
+      "Nachweis: Foto/Scan."
+    ],
+    "participatingProducts": [
+      {
+        "name": "FELIX Doppelt Lecker Katzennahrungsprodukte",
+        "imageUrl": "images/felix-doppelt-lecker.jpg"
+      }
+    ],
+    "infoText": "Teste FELIX Doppelt Lecker Katzennahrungsprodukte völlig kostenlos! Erstattung über das offizielle Portal.",
+    "isPopular": false,
+    "tips": [
+      "WICHTIG: Die Aktion startet erst am 22.06.2026! Einkäufe vor diesem Datum sind ungültig.",
+      "Kombinationszwang: Du musst zwingend mindestens ein FELIX Doppelt Lecker Trockenprodukt UND ein FELIX Doppelt Lecker Nassprodukt zusammen auf einem Kassenbon erwerben.",
+      "Die Erstattung beträgt bis zu maximal 7,00 € und umfasst sowohl Einkäufe vor Ort als auch in deutschen Online-Shops."
+    ],
+    "rating": 4
+  },
+  {
+    "id": "zott-zott-pure-joy-joghur",
+    "name": "Zott Pure Joy Joghurtalternative",
+    "brand": "Zott",
+    "cashbackVal": 1.98,
+    "category": "Lebensmittel",
+    "limitNote": "1.111 Teilnahmen pro Woche - 28.886 Teilnahmen insgesamt (montags ab 09:00 Uhr)",
+    "limitType": "weekly",
+    "deadline": "2026-08-31",
+    "websiteUrl": "https://purejoy-gratis-testen.de",
+    "imageUrl": "images/zott-pure-joy-mango.webp",
+    "allowedRetailers": [],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Gültig im Einzelhandel in Deutschland.",
+    "conditions": [
+      "Kaufzeitraum bis zum 31.08.2026.",
+      "Teilnahmefrist / Einsendeschluss: 31.08.2026.",
+      "Teilnahmebedingungen: 1.111 Teilnahmen pro Woche - 28.886 Teilnahmen insgesamt.",
+      "Nachweis: Foto/Scan."
+    ],
+    "participatingProducts": [
+      {
+        "name": "Zott Pure Joy Mango",
+        "imageUrl": "images/zott-pure-joy-mango.webp"
+      },
+      {
+        "name": "Zott Pure Joy Erdbeere",
+        "imageUrl": "images/zott-pure-joy-erdbeere.webp"
+      },
+      {
+        "name": "Zott Pure Joy Kirsche",
+        "imageUrl": "images/zott-pure-joy-kirsche.webp"
+      },
+      {
+        "name": "Zott Pure Joy Pfirsich-Maracuja",
+        "imageUrl": "images/zott-pure-joy-pfirsich.webp"
+      },
+      {
+        "name": "Zott Pure Joy Grieß Natur",
+        "imageUrl": "images/zott-pure-joy-griess.png"
+      },
+      {
+        "name": "Zott Pure Joy Pudding Schokolade",
+        "imageUrl": "images/zott-pure-joy-pudding-schoko.png"
+      }
+    ],
+    "infoText": "Teste Zott Pure Joy Joghurtalternative völlig kostenlos! Erstattung über das offizielle Portal.",
+    "isPopular": false,
+    "tips": [
+      "Mehrfachteilnahme möglich: Du kannst pro Haushalt bis zu 3-mal an der Aktion teilnehmen. Je Teilnahme werden bis zu zwei Becher (max. 1,98 € Erstattung) erstattet.",
+      "Wochenlimit von 1.111 Plätzen setzt jeden Montag um 09:00 Uhr zurück. Reiche deinen Bon am besten direkt montags morgens ein.",
+      "Hebe den Original-Kassenbon unbedingt bis zu 2 Wochen nach Aktionsende (31.08.2026) auf, da stichprobenartig Prüfungen stattfinden."
+    ],
+    "rating": 4
+  },
+  {
+    "id": "wc-ente-wc-ente-frische-sieg",
+    "name": "WC-Ente Frische-Siegel Halter",
+    "brand": "WC-Ente",
+    "cashbackVal": 3.29,
+    "startDate": "2026-07-13",
+    "category": "Haushalt",
+    "limitNote": "714 Teilnehmer pro Tag\n40.000 Teilnehmer insgesamt (täglich ab 7:00 Uhr)",
+    "limitType": "daily",
+    "deadline": "2026-09-05",
+    "websiteUrl": "https://wc-ente-aktion.com",
+    "imageUrl": "images/wc-ente-fresh-lime.jpg",
+    "allowedRetailers": [
+      "dm-drogerie markt"
+    ],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Ausschließlich gültig bei dm-drogerie markt.",
+    "conditions": [
+      "Kaufzeitraum bis zum 05.09.2026.",
+      "Teilnahmefrist / Einsendeschluss: 13.09.2026.",
+      "Teilnahmebedingungen: 714 Teilnehmer pro Tag\n40.000 Teilnehmer insgesamt.",
+      "Nachweis: Foto/Scan."
+    ],
+    "participatingProducts": [
+      {
+        "name": "WC-Ente Frische-Siegel Original Fresh Lime (36 ml)",
+        "imageUrl": "images/wc-ente-fresh-lime.jpg"
+      },
+      {
+        "name": "WC-Ente Frische-Siegel Original Ocean Wave (36 ml)",
+        "imageUrl": "images/wc-ente-ocean-wave.jpg"
+      },
+      {
+        "name": "WC-Ente Frische-Siegel Original Flower Oasis (36 ml)",
+        "imageUrl": "images/wc-ente-flower-oasis.jpg"
+      },
+      {
+        "name": "WC-Ente Frische-Siegel Original mit Bleichkraft Eukalyptus (36 ml)",
+        "imageUrl": "images/wc-ente-eukalyptus.jpg"
+      },
+      {
+        "name": "WC-Ente Frische-Siegel Original Azure Lagoon (36 ml)",
+        "imageUrl": "images/wc-ente-azure-lagoon.jpg"
+      }
+    ],
+    "infoText": "Teste WC-Ente Frische-Siegel Halter völlig kostenlos! Erstattung über das offizielle Portal.",
+    "isPopular": false,
+    "tips": [
+      "WICHTIG: Die Aktion startet erst am 13.07.2026! Käufe vor diesem Datum nehmen nicht teil.",
+      "Exklusiver Start: In der ersten Aktionswoche (13.07.2026 bis 19.07.2026) werden nur Kassenbons von dm akzeptiert. Erst danach öffnet sich die Aktion für Händler wie Rossmann oder Müller.",
+      "Tägliches Kontingent von 714 Plätzen (Reset um 07:00 Uhr morgens) bei einem Gesamtlimit von 40.000 Erstattungen."
+    ],
+    "rating": 4
+  },
+  {
+    "id": "zott-zott-monte-ice-cream",
+    "name": "Zott Monte Ice Cream",
+    "brand": "Zott",
+    "cashbackVal": 5.49,
+    "category": "Lebensmittel",
+    "limitNote": "200 Teilnehmer pro Woche - 5.000 Erstattungen insgesamt (montags ab 00:00 Uhr)",
+    "limitType": "weekly",
+    "deadline": "2026-09-28",
+    "websiteUrl": "https://monte-eis-testen.de",
+    "imageUrl": "images/zott-monte-eis-cup.webp",
+    "allowedRetailers": [],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Gültig im Einzelhandel in Deutschland.",
+    "conditions": [
+      "Kaufzeitraum bis zum 28.09.2026.",
+      "Teilnahmefrist / Einsendeschluss: 28.09.2026.",
+      "Teilnahmebedingungen: 200 Teilnehmer pro Woche - 5.000 Erstattungen insgesamt.",
+      "Nachweis: Foto/Scan."
+    ],
+    "participatingProducts": [
+      {
+        "name": "Monte Milcheis Family-Cup (460 ml)",
+        "imageUrl": "images/zott-monte-eis-cup.webp"
+      },
+      {
+        "name": "Monte Milcheis Sandwich 3er-Pack (3x 120 ml)",
+        "imageUrl": "images/zott-monte-eis-sandwich-3er.webp"
+      },
+      {
+        "name": "Monte Milcheis Sandwich (120 ml)",
+        "imageUrl": "images/zott-monte-eis-sandwich-single.png"
+      },
+      {
+        "name": "Monte Milcheis Cone 3er-Pack (3x 120 ml)",
+        "imageUrl": "images/zott-monte-eis-waffel-3er.webp"
+      },
+      {
+        "name": "Monte Milcheis Cone (120 ml)",
+        "imageUrl": "images/zott-monte-eis-waffel-single.webp"
+      },
+      {
+        "name": "Monte White Cookie Stick 3er-Pack (3x 90 ml)",
+        "imageUrl": "images/zott-monte-eis-stick-3er.webp"
+      },
+      {
+        "name": "Monte White Cookie Stick (90 ml)",
+        "imageUrl": "images/zott-monte-eis-stick-single.webp"
+      },
+      {
+        "name": "Monte Milcheis Squeeze (100 ml)",
+        "imageUrl": "images/zott-monte-eis-squeeze.webp"
+      }
+    ],
+    "infoText": "Teste Zott Monte Ice Cream völlig kostenlos! Erstattung über das offizielle Portal.",
+    "isPopular": false,
+    "tips": [
+      "WICHTIG: Dies ist kein garantiertes Cashback, sondern eine wöchentliche Verlosung! Pro Woche werden nur 200 Gewinner für die Rückerstattung per Zufallsprinzip ermittelt.",
+      "Der Kassenbon muss bis zum Abschluss der wöchentlichen Ziehung gut aufbewahrt werden.",
+      "Die Aktion läuft sehr lange (bis zum 27.09.2026), aber das Risiko des Leerkaufs liegt wegen der Auslosung bei dir."
+    ],
+    "rating": 4
+  },
+  {
+    "id": "k-hne-k-hne-spice-it-up-w",
+    "name": "KÜHNE Spice it up Würzsaucen 90ml",
+    "brand": "KÜHNE",
+    "cashbackVal": 2.99,
+    "category": "Lebensmittel",
+    "limitNote": "10.000 Teilnehmer insgesamt",
+    "limitType": "total",
+    "deadline": "2026-12-31",
+    "websiteUrl": "https://kassenbon-aktion.de/spice-it-up",
+    "imageUrl": "images/kuehne-spice-chili-knoblauch.jpg",
+    "allowedRetailers": [],
+    "excludedRetailers": [],
+    "allowedRetailersText": "Gültig im Einzelhandel in Deutschland.",
+    "conditions": [
+      "Kaufzeitraum bis zum 31.12.2026.",
+      "Teilnahmefrist / Einsendeschluss: 31.12.2026.",
+      "Teilnahmebedingungen: 10.000 Teilnehmer insgesamt.",
+      "Nachweis: Foto/Scan."
+    ],
+    "participatingProducts": [
+      {
+        "name": "Kühne Spice It Up – Chili Knoblauch (90ml)",
+        "imageUrl": "images/kuehne-spice-chili-knoblauch.jpg"
+      },
+      {
+        "name": "Kühne Spice It Up – Mediterrane Kräuter (90ml)",
+        "imageUrl": "images/kuehne-spice-mediterrane-kraeuter.jpg"
+      }
+    ],
+    "infoText": "Teste KÜHNE Spice it up Würzsaucen 90ml völlig kostenlos! Erstattung über das offizielle Portal.",
+    "isPopular": false,
+    "tips": [
+      "Flexible Einlösung: Du kannst den Kassenbon entweder ganz einfach per WhatsApp (Link wqco.de/spice) hochladen oder per E-Mail an spiceitup@kassenbon-aktion.de senden.",
+      "Bequeme Erstattung: Neben der klassischen SEPA-Überweisung ist auch eine Rückzahlung per PayPal möglich.",
+      "Es nehmen zwei Sorten teil ('Chili Knoblauch' und 'Mediterrane Kräuter'). Maximal eine Erstattung pro Person."
+    ],
+    "rating": 4
+  }
+];
+
+window.CAMPAIGNS = CAMPAIGNS;
+  
+  // Attach CAMPAIGNS to window to fit appState initialization
+  window.CAMPAIGNS = CAMPAIGNS;
+</script>
+  <script src="app.js"></script>
+</body>
+</html>

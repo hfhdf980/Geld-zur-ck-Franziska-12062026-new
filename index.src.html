@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CashbackRadar - Gratis Testen Aktionen &amp; Verfügbarkeit</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ==========================================================================
+       NAVBAR
+       ========================================================================== -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="logo">
+        <div class="logo-badge">€</div>
+        <span>CashbackRadar</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#" class="nav-link active">Dashboard</a></li>
+        <li><a href="#community" class="nav-link">Community-Meldungen</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ==========================================================================
+       HERO / QUICK STATS
+       ========================================================================== -->
+  <header class="hero-section">
+    <div class="container">
+      <h1 class="gradient-text">Gratis Testen Aktionen im Blick</h1>
+      <p>Verfolge tagesaktuelle Limits, vergleiche Teilnahmebedingungen und finde sofort heraus, in welchen Supermärkten und Drogerien du die Aktionsprodukte kaufen kannst!</p>
+      
+      <!-- Dynamic Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card blue" id="stat-active">
+          <div class="stat-card-content">
+            <div class="stat-label">Aktive Aktionen</div>
+            <div class="stat-value" id="val-active">--</div>
+            <div class="stat-desc">Sofort einlösbar</div>
+          </div>
+          <svg class="stat-icon icon-blue" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z"></path>
+          </svg>
+        </div>
+        
+        <div class="stat-card green" id="stat-potential">
+          <div class="stat-card-content">
+            <div class="stat-label">Sparpotenzial</div>
+            <div class="stat-value" id="val-potential">0.00 <span class="stat-unit">€</span></div>
+            <div class="stat-desc">Bei Teilnahme an allen Aktionen</div>
+          </div>
+          <svg class="stat-icon icon-green" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 5.625c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125"></path>
+          </svg>
+        </div>
+        
+        <div class="stat-card orange" id="stat-daily-reached">
+          <div class="stat-card-content">
+            <div class="stat-label">Tageslimit erreicht</div>
+            <div class="stat-value" id="val-daily-reached">--</div>
+            <div class="stat-desc">Aktionen heute voll</div>
+          </div>
+          <svg class="stat-icon icon-orange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0zM12 2v2"></path>
+          </svg>
+        </div>
+        
+        <div class="stat-card purple" id="stat-total-reached">
+          <div class="stat-card-content">
+            <div class="stat-label">Gesamtlimit erreicht</div>
+            <div class="stat-value" id="val-total-reached">--</div>
+            <div class="stat-desc">Aktionen komplett beendet</div>
+          </div>
+          <svg class="stat-icon icon-purple" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"></path>
+          </svg>
+        </div>
+      </div>
+      
+      <!-- KI-Bot Cashback-Assistent -->
+      <div class="ki-bot-container">
+        <div class="ki-bot-header">
+          <div class="ki-bot-avatar">
+            🤖
+            <span class="avatar-status-dot"></span>
+          </div>
+          <div class="ki-bot-title-group">
+            <span class="ki-bot-name">Radar-Bot</span>
+            <span class="ki-bot-status">Cashback-Assistent • Online</span>
+          </div>
+        </div>
+        <div class="ki-bot-chat-area" id="ki-bot-chat-area">
+          <div class="ki-bot-msg bot">
+            Hallo! Ich bin dein Cashback-Assistent. Frag mich einfach, z. B.: <i>„Gibt es gerade Duschgel kostenlos?“</i> oder <i>„Hast du Katzenfutter gratis?“</i>.
+          </div>
+        </div>
+        <div class="ki-bot-input-group">
+          <input type="text" id="ki-bot-input" placeholder="Frage den Cashback-Assistenten..." onkeydown="handleKiBotKeydown(event)">
+          <button class="btn btn-primary" onclick="sendKiBotMessage()" style="padding: 10px 16px; justify-content: center; font-weight: 700;">Senden</button>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       MAIN FILTER & SEARCH
+       ========================================================================== -->
+  <main class="container">
+    <section class="filter-wrapper">
+      <div class="filter-grid">
+        <!-- Search bar -->
+        <div class="search-box">
+          <svg class="search-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+          <input type="text" id="search-input" placeholder="Produkt oder Marke suchen...">
+        </div>
+        
+        <!-- Filter Category select -->
+        <select class="filter-select" id="filter-category">
+          <option value="all">Alle Kategorien</option>
+          <option value="Lebensmittel">Lebensmittel</option>
+          <option value="Drogerie">Drogerie</option>
+          <option value="Haushalt">Haushalt</option>
+          <option value="Haustiere">Haustiere</option>
+        </select>
+        
+        <!-- Filter Retailer select -->
+        <select class="filter-select" id="filter-retailer">
+          <option value="all">Beliebiger Einkaufsort</option>
+          <option value="REWE">REWE</option>
+          <option value="Edeka">EDEKA</option>
+          <option value="Kaufland">Kaufland</option>
+          <option value="dm-drogerie markt">dm Drogerie</option>
+          <option value="Rossmann">Rossmann</option>
+          <option value="Müller">Müller Drogerie</option>
+          <option value="Aldi">Aldi Süd/Nord</option>
+          <option value="Lidl">Lidl</option>
+          <option value="Fressnapf">Fressnapf</option>
+        </select>
+        
+        <!-- Sort Select -->
+        <select class="filter-select" id="sort-select">
+          <option value="default">Sortieren: Empfohlen</option>
+          <option value="cashback-desc">Höchster Cashback-Wert</option>
+          <option value="deadline-asc">Baldiges Aktionsende</option>
+        </select>
+      </div>
+      
+      <!-- Category chips (quick click) -->
+      <div class="category-chips">
+        <button class="chip active" data-category="all">Alle</button>
+        <button class="chip" data-category="Lebensmittel">Lebensmittel</button>
+        <button class="chip" data-category="Drogerie">Drogerie</button>
+        <button class="chip" data-category="Haushalt">Haushalt</button>
+        <button class="chip" data-category="Haustiere">Haustiere</button>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         CAMPAIGN CARDS GRID
+         ========================================================================== -->
+    <div id="campaign-grid" class="campaign-grid">
+      <!-- Rendered dynamically in app.js -->
+    </div>
+
+    <!-- ==========================================================================
+         COMMUNITY REPORTS / SIMULATOR
+         ========================================================================== -->
+    <section class="community-section" id="community" style="margin-top: 56px;">
+      <div class="simulator-box">
+        <h2>Community-Meldung einreichen</h2>
+        <p>Teile deine Erfahrungen aus dem Laden oder melde erfolgreiche Einreichungen! Hilf anderen Sparen.</p>
+        
+        <form id="report-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="report-user">Dein Name / Alias</label>
+              <input type="text" id="report-user" placeholder="SparFuchs99" required>
+            </div>
+            <div class="form-group">
+              <label for="report-product">Aktionsprodukt</label>
+              <select id="report-product" required>
+                <!-- Filled dynamically -->
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="report-retailer">Einkaufsmarkt</label>
+              <select id="report-retailer" required>
+                <option value="REWE">REWE</option>
+                <option value="Edeka">EDEKA</option>
+                <option value="Kaufland">Kaufland</option>
+                <option value="dm-drogerie markt">dm-drogerie markt</option>
+                <option value="Rossmann">Rossmann</option>
+                <option value="Müller">Müller Drogerie</option>
+                <option value="Aldi">Aldi Süd/Nord</option>
+                <option value="Lidl">Lidl</option>
+                <option value="Netto">Netto Marken-Discount</option>
+                <option value="Fressnapf">Fressnapf</option>
+                <option value="Anderer Händler">Anderer Händler</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="report-status">Status der Aktion</label>
+              <select id="report-status" required>
+                <option value="ok">✅ Erfolgreich erstattet / Limit offen</option>
+                <option value="warning">⚠️ Produkt fast ausverkauft im Regal</option>
+                <option value="danger">❌ Bon abgelehnt / Limit voll</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="report-text">Erfahrung &amp; Details</label>
+            <textarea id="report-text" placeholder="z. B. 'Bei REWE in Köln-Kalk waren heute noch 5 Packungen Oreo Double Creme im Keksregal. Bon-Upload lief problemlos durch!'" required></textarea>
+          </div>
+          
+          <button type="submit" class="btn btn-primary" style="justify-content: center; font-weight: 700;">Meldung veröffentlichen</button>
+        </form>
+        
+        <!-- Live stream -->
+        <div class="reports-container">
+          <h3 style="font-size: 1.1rem; border-left: 3px solid var(--accent-purple); padding-left: 8px; margin-bottom: 12px;">Live-Meldungen</h3>
+          <span style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: -8px; margin-bottom: 12px; font-style: italic;">⚠️ Demo-Feed: Vordefinierte &amp; simulierte Meldungen zur Veranschaulichung</span>
+          <div class="reports-feed" id="reports-feed">
+            <!-- Rendered in app.js -->
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==========================================================================
+       CAMPAIGN DETAIL MODAL
+       ========================================================================== -->
+  <div class="modal-overlay" id="detail-modal">
+    <div class="modal-content">
+      <button class="modal-close" id="modal-close" aria-label="Schließen">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+      
+      <div class="modal-body" id="modal-body-content">
+        <!-- Rendered dynamically in app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading scripts -->
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
